@@ -8,7 +8,22 @@ const staticPath = path.join(__dirname, "../../public");
 router.use("/public", express.static(staticPath));
 
 router.get("/", (req, res) => {
-  const readmePath = path.join(__dirname, "../..", "README.md");
+  // Try multiple possible paths for README.md (works in different environments)
+  const possiblePaths = [
+    path.join(__dirname, "../..", "Readme.md"),
+    path.join(__dirname, "../..", "README.md"),
+    path.join(process.cwd(), "Readme.md"),
+    path.join(process.cwd(), "README.md")
+  ];
+
+  let readmePath = possiblePaths[0];
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      readmePath = p;
+      break;
+    }
+  }
+
   fs.readFile(readmePath, "utf8", (err, data) => {
     if (err) {
       console.error("Error reading README.md:", err);
