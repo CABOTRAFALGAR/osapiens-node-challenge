@@ -1,0 +1,16 @@
+name: "example_workflow"
+steps:
+  - taskType: "analysis"
+    stepNumber: 1
+
+  - taskType: "polygonArea"
+    stepNumber: 2
+    dependsOn: "analysis"
+
+  - taskType: "notification"
+    stepNumber: 3
+    dependsOn: "polygonArea"
+  
+  - taskType: "report"
+    stepNumber: 4
+    dependsOn: "notification"

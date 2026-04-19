@@ -1,0 +1,107 @@
+{
+  "info": {
+    "_postman_id": "740eb0b1-634e-4830-a61a-8644b2d9a075",
+    "name": "Osapiens API Challenge",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43211493"
+  },
+  "item": [
+    {
+      "name": "1. Create Workflow (Analysis)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Save workflowId automatically for subsequent requests",
+              "if (pm.response.code === 202) {",
+              "    var jsonData = pm.response.json();",
+              "    pm.collectionVariables.set(\"workflowId\", jsonData.workflowId);",
+              "    console.log(\"WorkflowId saved: \" + jsonData.workflowId);",
+              "}",
+              "",
+              "// Wait 3 seconds before next request",
+              "setTimeout(function(){}, 3000);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clientId\": \"test-polygon-ok\",\n  \"geoJson\": {\n    \"type\": \"Polygon\",\n    \"coordinates\": [\n      [\n        [-63.624885020050996, -10.311050368263523],\n        [-63.624885020050996, -10.367865108370523],\n        [-63.61278302732815, -10.367865108370523],\n        [-63.61278302732815, -10.311050368263523],\n        [-63.624885020050996, -10.311050368263523]\n      ]\n    ]\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/analysis",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "analysis"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Workflow Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/workflow/{{workflowId}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "workflow",
+            "{{workflowId}}",
+            "status"
+          ]
+        },
+        "description": "Check workflow status and task progress"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Workflow Results",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/workflow/{{workflowId}}/results",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "workflow",
+            "{{workflowId}}",
+            "results"
+          ]
+        },
+        "description": "Get final results when the workflow is completed"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3005"
+    },
+    {
+      "key": "workflowId",
+      "value": ""
+    }
+  ]
+}
